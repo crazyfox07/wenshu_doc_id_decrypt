@@ -1,11 +1,4 @@
-# -*- coding:utf-8 -*-
-"""
-File Name: crypto
-Version:
-Description:
-Author: liuxuewen
-Date: 2018/9/10 9:29
-"""
+
 from Crypto.Cipher import AES
 from binascii import b2a_hex
 import base64

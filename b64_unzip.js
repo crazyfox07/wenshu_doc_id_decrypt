@@ -1,9 +1,5 @@
 
 
-
-
-
-
 (function(global) {
     'use strict';
     if (global.Base64_Zip){
