@@ -3,9 +3,10 @@ import re
 
 from aes_decrypt import aes_decode
 
-def py_execjs(js='',file_='aes.js'):
+
+def py_execjs(js='', file_='aes.js'):
     node = execjs.get()
-    content=open(file_,encoding='utf-8',errors='ignore').read()
+    content = open(file_, encoding='utf-8', errors='ignore').read()
     ctx = node.compile(content)
     result = ctx.eval(js)
     return result
@@ -16,14 +17,16 @@ def get_b64_data_unzip(str_):
     b64_data = py_execjs(js=js_func, file_='b64_unzip.js')
     return b64_data
 
+
 # 获取aes的key
 def get_aes_key(str_):
     b64_data_unzip = get_b64_data_unzip(str_)
-    str1, str2 = re.findall('\$hidescript=(.*?);.*?\((.*?)\)\(\)',b64_data_unzip)[0]
-    js_func = str2.replace('$hidescript',str1)
+    str1, str2 = re.findall('\$hidescript=(.*?);.*?\((.*?)\)\(\)', b64_data_unzip)[0]
+    js_func = str2.replace('$hidescript', str1)
     aes_key = py_execjs(js=js_func, file_='aes.js')
-    aes_key = re.findall('com.str._KEY=\"(.*?)\";',aes_key)[0]
+    aes_key = re.findall('com.str._KEY=\"(.*?)\";', aes_key)[0]
     return aes_key
+
 
 # aes解密
 def aes_decrypt(str_, aes_key):
@@ -33,6 +36,7 @@ def aes_decrypt(str_, aes_key):
     # aes解密
     text_decode = aes_decode(text_encrypted, aes_key)
     return text_decode
+
 
 # 程序运行入口，解密"文书ID"
 def doc_id_decyrpt(run_eval, doc_id_src):
@@ -45,9 +49,10 @@ def doc_id_decyrpt(run_eval, doc_id_src):
     result2 = aes_decrypt(result1, aes_key)
     return result2
 
+
 if __name__ == '__main__':
     # "RunEval"
-    run_eval = 'w61ZS27CgzAQPQtRFsK2wqh6AcKUVcKOw5DDpcOIQhFJGhYNwpVDV1HDrl4gCcOlY37DgRA3fhIawoQ9wr/Dt8OGY8KwWB7DgsOtw64Uw4jDsDtefcOEMjx+wr7Dr2XDtMK1PmzDpDrDmsOuwpjDq8K4JCDCjBZvIAHDgsKOFcOyCkAsaVfDrErCqC0EeAfCsxDCqB4YQ3FBB0gAagAGE2AHw7hBDHgCOEBCBSDCsBBMEcOcw7PDvMOVIsKIwo7Cp1jDvgRxJBfCnk/Cvkguw4bDnMOzJVXDi8Kvw7PChcOTw5XCkhIhwoTDi8KcbMKCU8OZZzrDkT3Ckz0uw79+RxNLwocTDXLDkhkSwpTDnCoBw4vDqsOOw43CoDlYJW/CpW5rTkVvw6rDsTxUwpZ1wp3ColoKSgwtwr7DsyTDuzFaeMOsTMK7wqfDhhDCtcOBwrrCjxnCjMKwGmvCqsOFXsKfE8ONwp7CpnBXw67DhntjwqvDu8O0w4FRw6PDocOfwrMfw5jCnMKvwrHCqGzDgcO5woTCmk/CncK8PsKSwpvDm1/Di1bDmsO4AsKuwrA/fQfDjlrCocK5QkwbwqfDrSPDjsK8wq1jLsK6wrvCg8ONwprDicK/X2o2w7s0N8OsLXZ9wp/DrnEoM8KIG8OFw4nCqwbCiUpvQMO1aMORIcKNODs+wp0yW8KzEMKcccOvFw=='
-    doc_id_src = 'DcKNwrcNw4BADMOEVlLClsK+VMOcfyTDuwrDogAWwpQKXxtEw7LChhYWwoAGw5DCggzCrcKFwpnCl8KjwrB3woDCg2cyRMKUw5xZSnXClA7CnmQGL8KeRXDCmcO+L3bCmmFJQ3cWwofDnXPDolLDkWIUGcOewqbDvcOiJcOCFmEywpTCs8O3EsKUwqBHRcOfwrEww7rDgcODw77Ct8OPw7p+wqvDjEJPw7LDtMOvGsKYw7Qwwp7DqHUzWcOVw43DuxFvBcOkbx3DjQc='
+    run_eval = 'w61Zw5vCjsKCMBDDvRbCjA9tw5jDrA8Qwp/DvMKEfcKcNMOEw6DCjQdlU8OZJ8Ojwr8vwqAiwpcqIG3Ct8KrJyFjwpjDjsOlw4zCmU5Jw6N0Gy9XwodIw4bDn8Opw6wrwpXDsX7Ds8K5wpbDiW7Cvl3DiHnCslwxw5/Ds0lAOC0+QALDhHvDrMKQVyjDpE3DhhXCpxJ6CwHDnsOBLATCugfDhsOQXMKwwoPDksOBBMKIAQnDoARVwqNgw5QPwp5QHEpCByDCsBHDnBA8CMOCw5kkSsO2wodUw75EaSInQUjCocOIHsOGw7zDoyk3K8Kfw6PCicOTw5nCkzIhwoTDj8K8YsKBUz1mwr7DkMK9UsK8Tm9/w4cTw4vDlcKZBXnDuQoJw4p+GgnDq8Omw57DhcOhfsKyBm7CpcOtQ0zDlWhqfcKZwqpAw53CpsKoBUFZw4PCg8OYJcOIfsKMVl47YcO3wrQYYjbDmMO2OcKHEV5jXcK1w7jDqwtSw5/DqsOXwqkxwpDCoz1TT2rCtQIyFsKzOXbCmsO7ZQzCsDkmw67CnnBqwr3Di1xpwp8Kw61DNsKMa8Kjw5NvagjCjDFpFsKiwq0Uw6VWwrBzwobDvnnCqcO/wqV1VsO5w6jDjmgfwo7CscK0w7bChgp5XiHDtwUAa1x4el3Dp1xjSXFxa8OVRcK1wo/CvFpbDUgjwq7Cnm7DsAYowoIzHsO8Ag=='
+    doc_id_src = 'FcONwrcRA0EMw4DDgMKWw6hNeHTDvcKXwqRXwr4DcHjCkcKJYMOBwqAlwrDDuD5ywqsdw7PDq8OIO8OsQsOQPsKKw7DChltIw4dZH8KewqFpZFbCnT/CnScrwq58OBVbw5p4woTCvlDCjMKCWVfDt8Kxb8KlEsO3CsKYwpjDu8O7MMO0wpY0w4sxKEfCi8K9eQjDm8KNwohVd8K1w6/Dq8O5wrpJw5UrOjvDqjZDIsOMSMOIwrDCksODw6R8wqDDiTvCqMOtdwRLw6E/'
     result = doc_id_decyrpt(run_eval, doc_id_src)
     print(result)
