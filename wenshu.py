@@ -4,7 +4,7 @@ import re
 from aes_decrypt import aes_decode
 
 
-def py_execjs(js='', file_='aes.js'):
+def py_execjs(js, file_):
     node = execjs.get()
     content = open(file_, encoding='utf-8', errors='ignore').read()
     ctx = node.compile(content)
@@ -23,7 +23,11 @@ def get_aes_key(str_):
     b64_data_unzip = get_b64_data_unzip(str_)
     str1, str2 = re.findall('\$hidescript=(.*?);.*?\((.*?)\)\(\)', b64_data_unzip)[0]
     js_func = str2.replace('$hidescript', str1)
-    aes_key = py_execjs(js=js_func, file_='aes.js')
+    aes_key = execjs.eval(js_func)
+    if not aes_key:
+        # windows下有时execjs执行的js函数会跟浏览器控制台执行有差别，此时使用js2py包，缺点是运行的慢
+        import js2py
+        aes_key = js2py.eval_js(js_func)
     aes_key = re.findall('com.str._KEY=\"(.*?)\";', aes_key)[0]
     return aes_key
 

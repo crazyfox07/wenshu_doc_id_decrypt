@@ -38,7 +38,7 @@ class CryptAes():
 def aes_decode(text, key, iv='abcd134556abcedf'):
     mode = AES.MODE_CBC
     pad_mode = 'pkcs7padding'
-    ca = CryptAes(key, iv, mode, pad_mode)  # 初始化密钥 和 iv
+    ca = CryptAes(key.encode('utf-8'), iv.encode('utf-8'), mode, pad_mode)  # 初始化密钥 和 iv
     text_decode = ca.decrypt(text)  # 解密
     return text_decode
 
