@@ -3,7 +3,7 @@
 ```
 pip install pycryptodome
 ```
-js2py的安装
+如果本地没有安装node.js, 需要安装js2py，但是js2py执行速度慢，js2py的安装
 ```
 pip install Js2Py
 ```
